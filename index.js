@@ -129,14 +129,16 @@ app.get('/send/:phone/:message', async (req, res) => {
 
         // Check if the message is a number (OTP) or a regular message
         if (!isNaN(message)) {
-            content = `
-*Your OTP is ${message}.* 
-It is valid for 3 minutes. Do not share this code with anyone to keep your account secure.
-Powered by Lampros App, Lampros Virtual Build Mart Private Limited India.`;
+            content = `*Your verification code for Lampros Home solutions App is:*
+${message}
+
+This code is valid for 10 minutes. Please do not share it with anyone for your security.
+
+Thank you for choosing Lampros to bring your dream home to life!
+*Lampros Virtual Buildmart*`;
         } else {
             content = `
-${message}
-Powered by Lampros App, Lampros Virtua Build Mart Private Limited India.`;
+${message}`;
         }
 
         await client.sendMessage(phoneNumber, { text: content }); // Send as text-based message
