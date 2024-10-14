@@ -125,17 +125,24 @@ app.get('/send/:phone/:message', async (req, res) => {
     const phoneNumber = `${phone}@s.whatsapp.net`;
 
     try {
-        let url = 'https://placehold.co/600x400/D8D2C2/4A4947/png?font=lora&text='+ message;
-        await client.sendMessage(phoneNumber, {
-            image: { url: url }, // Corrected to lowercase "image"
-            caption: `
-> *Your OTP is ${message}.* 
-> It is valid for 3 minutes. Do not share this code with anyone to keep your account secure.
-> Powered By NearbyPins 💌`
+        let content = '';
 
-        });
+        // Check if the message is a number (OTP) or a regular message
+        if (!isNaN(message)) {
+            content = `
+*Your OTP is ${message}.* 
+It is valid for 3 minutes. Do not share this code with anyone to keep your account secure.
+Powered by Lampros App, Lampros Virtual Build Mart Private Limited India.`;
+        } else {
+            content = `
+${message}
+Powered by Lampros App, Lampros Virtua Build Mart Private Limited India.`;
+        }
+
+        await client.sendMessage(phoneNumber, { text: content }); // Send as text-based message
         res.json({ status: 'Message sent successfully', phoneNumber, message });
     } catch (error) {
         res.status(500).json({ error: 'Failed to send message', details: error.message });
     }
 });
+
